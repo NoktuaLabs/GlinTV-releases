@@ -8,18 +8,24 @@
 # la release vX.Y.Z (étiquette sur main), y joint le binaire, puis supprime la branche :
 # le binaire ne reste pas dans l'historique du dépôt.
 #
-# Générique : le même fichier sert à tous les dépôts *-releases de NoktuaLabs.
+# Générique, SAUF une adaptation locale (13/11) : un APK est aussi joint sous un nom
+# fixe, <Produit>-latest.apk, pour une adresse qui ne change jamais
+# (…/releases/latest/download/GlinTV-latest.apk), à taper dans Downloader sur la TV.
+# Lancé à la main (workflow_dispatch), le même workflow ajoute cette copie à la
+# dernière release existante.
 name: Publier une version
 
 on:
   push:
     branches: ['publication/v*']
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   publier:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,7 +41,9 @@ jobs:
           BIN=( *.dmg *.apk )
           [[ ${#BIN[@]} -eq 1 ]] || { echo "Il faut exactement un DMG ou un APK (trouvé : ${#BIN[@]})"; exit 1; }
           [[ -s NOTE.md ]] || { echo "NOTE.md manquante"; exit 1; }
-          gh release create "$VERSION" "${BIN[0]}" \
+          JOINTS=( "${BIN[0]}" )
+          if [[ "${BIN[0]}" == *.apk ]]; then cp "${BIN[0]}" "$PRODUIT-latest.apk"; JOINTS+=( "$PRODUIT-latest.apk" ); fi
+          gh release create "$VERSION" "${JOINTS[@]}" \
             --title "$PRODUIT ${VERSION#v}" --notes-file NOTE.md --target main
 
       - name: Supprimer la branche de publication
@@ -43,3 +51,21 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh api -X DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${GITHUB_REF_NAME}"
+
+  # À la main : joindre <Produit>-latest.apk à la dernière release (copie de son APK versionné).
+  ajouter-latest:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copie à nom fixe
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          PRODUIT="${GITHUB_REPOSITORY#*/}"; PRODUIT="${PRODUIT%-releases}"
+          TAG=$(gh release view -R "$GITHUB_REPOSITORY" --json tagName --jq .tagName)
+          APK=$(gh release view "$TAG" -R "$GITHUB_REPOSITORY" --json assets --jq '[.assets[].name | select(endswith(".apk") and (endswith("-latest.apk") | not))][0]')
+          [[ -n "$APK" && "$APK" != "null" ]] || { echo "Pas d'APK dans $TAG"; exit 1; }
+          gh release download "$TAG" -R "$GITHUB_REPOSITORY" -p "$APK"
+          cp "$APK" "$PRODUIT-latest.apk"
+          gh release upload "$TAG" "$PRODUIT-latest.apk" --clobber -R "$GITHUB_REPOSITORY"
