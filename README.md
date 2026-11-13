@@ -36,7 +36,7 @@ GlinTV s'installe à partir de son fichier APK. Trois façons de faire, au choix
 
 1. Sur la TV, installez **Downloader** depuis le Play Store.
 2. Autorisez Downloader à installer des applis : dans les paramètres de la TV, **Sources inconnues** ou **Installer des applis inconnues** (l'emplacement varie selon la TV, souvent sous Applications › Sécurité et restrictions).
-3. Dans Downloader, tapez l'adresse de l'APK :<br>`https://github.com/NoktuaLabs/GlinTV-releases/releases/latest/download/GlinTV-latest.apk`
+3. Dans Downloader, tapez le code **6257974** (ou l'adresse complète de l'APK :<br>`https://github.com/NoktuaLabs/GlinTV-releases/releases/latest/download/GlinTV-latest.apk`). Le code mène toujours à la dernière version.
 4. Une fois le fichier téléchargé, choisissez **Installer**.
 
 **Avec une clé USB**
