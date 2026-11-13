@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/NoktuaLabs/GlinTV-releases/releases/latest"><b>⬇&nbsp;Télécharger GlinTV</b></a><br>
-  <sub>Android TV 9 ou plus récent · version 1.7</sub>
+  <sub>Android TV 9 ou plus récent</sub>
 </p>
 
 GlinTV remplace l'écran d'accueil de votre TV Android. À la place des rangées de vignettes : une grande photo, l'heure en verre qui passe derrière les montagnes, la météo du jour et vos apps dans un dock.
