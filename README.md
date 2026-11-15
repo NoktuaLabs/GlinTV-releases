@@ -11,7 +11,7 @@ GlinTV remplace l'écran d'accueil de votre TV Android. À la place des rangées
 
 <p align="center"><img src="images/etapes.png" alt="Trois étapes : installer, se laisser guider, profiter"></p>
 
-Le fond change toutes les 10 minutes, ou à chaque retour sur l'accueil : c'est vous qui choisissez. Hors ligne, GlinTV tourne sur ses scènes intégrées.
+Le fond change à votre rythme : de toutes les 5 minutes à une fois par jour, au lever et au coucher du soleil, ou à chaque retour sur l'accueil. Hors ligne, GlinTV tourne sur ses scènes intégrées.
 
 ## Ce qu'il sait faire
 
